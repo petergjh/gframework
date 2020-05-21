@@ -33,7 +33,7 @@ namespace gframeworkDemo
             //把参数累加到“实体类”中
             _MyDataModel.Level += addNumber;
             //把数据变化发消息给“视图层”
-            //...
+            SendNotification("Msg_AddLevel", _MyDataModel);
         }
 
     }
