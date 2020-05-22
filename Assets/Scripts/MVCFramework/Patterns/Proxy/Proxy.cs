@@ -1,71 +1,129 @@
-﻿//
-//  PureMVC C# Standard
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
+﻿/* 
+ PureMVC C# Port by Andy Adamczak <andy.adamczak@puremvc.org>, et al.
+ PureMVC - Copyright(c) 2006-08 Futurescale, Inc., Some rights reserved. 
+ Your reuse is governed by the Creative Commons Attribution 3.0 License 
+*/
+
+#region Using
+
+using System;
 
 using PureMVC.Interfaces;
-using PureMVC.Patterns.Observer;
+using PureMVC.Patterns;
 
-namespace PureMVC.Patterns.Proxy
+#endregion
+
+namespace PureMVC.Patterns
 {
     /// <summary>
-    /// A base <c>IProxy</c> implementation. 
+    /// A base <c>IProxy</c> implementation
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         In PureMVC, <c>Proxy</c> classes are used to manage parts of the 
-    ///         application's data model.
-    ///     </para>
-    ///     <para>
-    ///          A <c>Proxy</c> might simply manage a reference to a local data object, 
-    ///          in which case interacting with it might involve setting and 
-    ///          getting of its data in synchronous fashion.
-    ///     </para>
-    ///     <para>
-    ///         <c>Proxy</c> classes are also used to encapsulate the application's 
-    ///         interaction with remote services to save or retrieve data, in which case,
-    ///         we adopt an asynchronous idiom; setting data (or calling a method) on the 
-    ///         <c>Proxy</c> and listening for a <c>Notification</c> to be sent 
-    ///         when the <c>Proxy</c> has retrieved the data from the service.
-    ///     </para>
+    /// 	<para>In PureMVC, <c>Proxy</c> classes are used to manage parts of the application's data model</para>
+    /// 	<para>A <c>Proxy</c> might simply manage a reference to a local data object, in which case interacting with it might involve setting and getting of its data in synchronous fashion</para>
+    /// 	<para><c>Proxy</c> classes are also used to encapsulate the application's interaction with remote services to save or retrieve data, in which case, we adopt an asyncronous idiom; setting data (or calling a method) on the <c>Proxy</c> and listening for a <c>Notification</c> to be sent when the <c>Proxy</c> has retrieved the data from the service</para>
     /// </remarks>
-    /// <seealso cref="PureMVC.Core.Model"/>
-    public class Proxy: Notifier, IProxy
+	/// <see cref="PureMVC.Core.Model"/>
+    public class Proxy : Notifier, IProxy, INotifier
     {
-        /// <summary> Name of the proxy</summary>
-        public const string NAME = "Proxy";
+		#region Constants
 
-        /// <summary>
-        /// Constructor.
+		/// <summary>
+        /// The default proxy name
         /// </summary>
-        /// <param name="proxyName"></param>
-        /// <param name="data"></param>
-        public Proxy(string proxyName, object data = null)
+        public static string NAME = "Proxy";
+
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+        /// Constructs a new proxy with the default name and no data
+        /// </summary>
+        public Proxy() 
+            : this(NAME, null)
         {
-            ProxyName = proxyName ?? NAME;
-            if (data != null) Data = data;
-        }
+		}
 
         /// <summary>
-        /// Called by the Model when the Proxy is registered
+        /// Constructs a new proxy with the specified name and no data
         /// </summary>
-        public virtual void OnRegister()
-        { 
-        }
-
-        /// <summary>
-        /// Called by the Model when the Proxy is removed
-        /// </summary>
-        public virtual void OnRemove()
+        /// <param name="proxyName">The name of the proxy</param>
+        public Proxy(string proxyName)
+            : this(proxyName, null)
         {
-        }
+		}
 
-        /// <summary>the proxy name</summary>
-        public string ProxyName { get; protected set; }
+        /// <summary>
+        /// Constructs a new proxy with the specified name and data
+        /// </summary>
+        /// <param name="proxyName">The name of the proxy</param>
+        /// <param name="data">The data to be managed</param>
+		public Proxy(string proxyName, object data)
+		{
 
-        /// <summary>the data object</summary>
-        public object Data { get; set; }
-    }
+			m_proxyName = (proxyName != null) ? proxyName : NAME;
+			if (data != null) m_data = data;
+		}
+
+		#endregion
+
+		#region Public Methods
+
+		#region IProxy Members
+
+		/// <summary>
+		/// Called by the Model when the Proxy is registered
+		/// </summary>
+		public virtual void OnRegister()
+		{
+		}
+
+		/// <summary>
+		/// Called by the Model when the Proxy is removed
+		/// </summary>
+		public virtual void OnRemove()
+		{
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Accessors
+
+		/// <summary>
+		/// Get the proxy name
+		/// </summary>
+		/// <returns></returns>
+		public virtual string ProxyName
+		{
+			get { return m_proxyName; }
+		}
+
+		/// <summary>
+		/// Set the data object
+		/// </summary>
+		public virtual object Data
+		{
+			get { return m_data; }
+			set { m_data = value; }
+		}
+
+		#endregion
+
+		#region Members
+
+		/// <summary>
+        /// The name of the proxy
+        /// </summary>
+		protected string m_proxyName;
+		
+		/// <summary>
+		/// The data object to be managed
+		/// </summary>
+		protected object m_data;
+
+		#endregion
+	}
 }

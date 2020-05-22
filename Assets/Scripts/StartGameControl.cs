@@ -7,8 +7,13 @@ namespace gframeworkDemo
     /// <summary>
     /// Control控制层：游戏入口
     /// </summary>
-    public class StartGame : MonoBehaviour
+    public class StartGameControl : MonoBehaviour
     {
+        private void Start()
+        {
+            //启动框架
+            new ApplicationFacadeControl(this.gameObject);
+        }
 
     }
 

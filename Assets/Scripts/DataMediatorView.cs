@@ -1,5 +1,5 @@
 ﻿using PureMVC.Interfaces;
-using PureMVC.Patterns.Mediator;
+using PureMVC.Patterns;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,6 @@ namespace gframeworkDemo
     {
         //定义名称
         public new const string NAME = "DataMediatorView";
-        private static string mediatorName;
-        private static object viewComponent;
         //定义两个控件
         private Text TxtLevel;
         private Button BtnDisplayLevelNum;
@@ -25,7 +23,7 @@ namespace gframeworkDemo
         /// 构造函数
         /// </summary>
         /// <param name="goRootNode">UI根节点</param>
-        public DataMediatorView(string NAME,GameObject goRootNode):base(mediatorName, viewComponent)
+        public DataMediatorView(GameObject goRootNode)
         {
             //视图类名称
             //MediatorViewName = mediatorViewName;
@@ -40,19 +38,29 @@ namespace gframeworkDemo
         private void OnClickAddingLevelNumber()
         {
             //定义消息，发消息到”控制层“
+            SendNotification("Reg_StartDataCommand");
         }
 
-        //本视图层，允许接收的消息
-        public override string[] ListNotificationInterests()
+        /// <summary>
+        ///本视图层，允许接收的消息
+        /// </summary>
+        /// <returns></returns>
+        public override IList<string> ListNotificationInterests()
         {
-            //return base.ListNotificationInterests();
-            //声明一个空字符串数组用来存接收到的消息内容
-            string[] listResult = new string[]{};
-            //可以接收多条消息
-            listResult[0]="Msg_AddLevel";
+            IList<string> listResult = new List<string>();
+            listResult.Add("Msg_AddLevel");
             return listResult;
-
         }
+        //本视图层，允许接收的消息
+        //public override string[] ListNotificationInterests()
+        //{
+        //    //return base.ListNotificationInterests();
+        //    //声明一个空字符串数组用来存接收到的消息内容
+        //    string[] listResult = new string[]{};
+        //    //可以接收多条消息
+        //    listResult[0]="Msg_AddLevel";
+        //    return listResult;
+        //}
 
         /// <summary>
         /// 处理消息

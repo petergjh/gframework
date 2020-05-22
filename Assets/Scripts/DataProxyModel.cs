@@ -1,4 +1,4 @@
-﻿using PureMVC.Patterns.Proxy;
+﻿using PureMVC.Patterns;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
